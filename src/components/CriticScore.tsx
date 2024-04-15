@@ -1,5 +1,4 @@
 import { Badge } from "@chakra-ui/react";
-import { SiCoreldraw } from "react-icons/si";
 
 interface Props {
   score: number;
