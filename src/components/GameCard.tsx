@@ -24,5 +24,4 @@ const GameCard = ({ game }: Props) => {
     </Card>
   );
 };
-
 export default GameCard;
