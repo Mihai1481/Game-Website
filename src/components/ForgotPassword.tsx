@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import {
   Box,
@@ -15,22 +15,22 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const SignUp: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [resetEmailSent, setResetEmailSent] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Reset error before trying to sign up
+    setError(null); // Reset error before trying to reset password
+    setResetEmailSent(false); // Reset password reset message
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User registered");
-      navigate("/login"); // Redirect to login after signup
+      await sendPasswordResetEmail(auth, email);
+      setResetEmailSent(true); // Show success message
     } catch (error) {
-      console.error("Error signing up: ", error);
-      setError("Failed to sign up. Please check your details and try again.");
+      console.error("Error sending password reset email: ", error);
+      setError("Failed to send password reset email. Please try again.");
     }
   };
 
@@ -56,15 +56,21 @@ const SignUp: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <VStack spacing={6}>
             <Heading as="h2" size="lg" textAlign="center" color="teal.600">
-              Sign Up
+              Reset Password
             </Heading>
             <Text textAlign="center" color="gray.600">
-              Create a new account by filling the form below.
+              Enter your email to reset your password.
             </Text>
             {error && (
               <Alert status="error">
                 <AlertIcon />
                 {error}
+              </Alert>
+            )}
+            {resetEmailSent && (
+              <Alert status="success">
+                <AlertIcon />
+                Password reset email sent! Check your inbox.
               </Alert>
             )}
             <FormControl id="email" isRequired>
@@ -74,27 +80,14 @@ const SignUp: React.FC = () => {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                bg="gray.50"
                 color="black"
-                borderColor="gray.300"
-                _placeholder={{ color: "gray.400" }}
-              />
-            </FormControl>
-            <FormControl id="password" isRequired>
-              <FormLabel color="gray.700">Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 bg="gray.50"
-                color="black"
                 borderColor="gray.300"
                 _placeholder={{ color: "gray.400" }}
               />
             </FormControl>
             <Button colorScheme="teal" type="submit" width="full">
-              Sign Up
+              Reset Password
             </Button>
             <Button
               variant="outline"
@@ -113,4 +106,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default ForgotPassword;

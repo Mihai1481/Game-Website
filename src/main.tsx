@@ -17,8 +17,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          {" "}
-          {/* Adaugă AuthProvider aici */}
           <RouterProvider router={router} />
           <ReactQueryDevtools />
         </AuthProvider>
