@@ -48,7 +48,7 @@ const RandomGameButton: React.FC = () => {
         }}
         transition="all 0.3s ease"
       >
-        Let me chose a game for you
+        🔵 Let me chose a game for you 🔵
       </Button>
     </Heading>
   );
